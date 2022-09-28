@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_PASSWORD=1234
+      - MYSQL_USER=harec
+      #- /etc/group:/etc/group:ro
+      #- /etc/passwd:/etc/passwd:ro
+    user: "1000:1000"
+    command: --defaults-file=/config/my.ini --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./mysql:/var/lib/mysql:rw
+      - ./Data:/Data:rw
+      - ./Uploads:/Uploads
+      - ./config:/config
+    container_name: mysql_8
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8071:8080
+    links:
+      - db
+
